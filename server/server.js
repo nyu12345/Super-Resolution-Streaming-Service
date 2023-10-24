@@ -1,31 +1,32 @@
 const express = require('express');
-const fs = require('fs');
 const cors = require('cors');
-
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Use the cors middleware
 app.use(cors());
 
 app.get('/video', (req, res) => {
-    const path = 'static/sample.mp4';
-    const stat = fs.statSync(path);
-    const fileSize = stat.size;
+    const videoPath = path.join(__dirname, 'static/sample.mp4'); // path to your MP4 file
+    const fileSize = fs.statSync(videoPath).size;
+
     const range = req.headers.range;
 
     if (range) {
         const parts = range.replace(/bytes=/, "").split("-");
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-        const chunksize = (end - start) + 1;
-        const file = fs.createReadStream(path, { start, end });
+
+        const chunkSize = (end - start) + 1;
+        const file = fs.createReadStream(videoPath, { start, end });
         const head = {
             'Content-Range': `bytes ${start}-${end}/${fileSize}`,
             'Accept-Ranges': 'bytes',
-            'Content-Length': chunksize,
+            'Content-Length': chunkSize,
             'Content-Type': 'video/mp4',
         };
+
         res.writeHead(206, head);
         file.pipe(res);
     } else {
@@ -34,10 +35,10 @@ app.get('/video', (req, res) => {
             'Content-Type': 'video/mp4',
         };
         res.writeHead(200, head);
-        fs.createReadStream(path).pipe(res);
+        fs.createReadStream(videoPath).pipe(res);
     }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}/`);
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}/`);
 });
