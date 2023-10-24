@@ -4,57 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black & White Video Stream</title>
-    <style>
-        #video,
-        #canvas {
-            display: none;
-            /* Hide original video and canvas. */
-        }
-    </style>
+    <title>Black and White Video Stream</title>
 </head>
 
 <body>
-
-    <video id="video" controls>
-        <source src="http://0.0.0.0:3000/video" type="video/mp4">
+    <video id="sourceVideo" width="640" height="360" crossorigin="anonymous" muted style="display: none;">
+        <source src="http://localhost:3000/video" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
-    <canvas id="canvas" width="640" height="360"></canvas> <!-- You can adjust the width and height as needed. -->
-
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-
-        video.addEventListener('play', function () {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.style.display = 'block'; // Show canvas with black & white video.
-
-            function loop() {
-                if (!video.paused && !video.ended) {
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height); // Draw current video frame to canvas.
-
-                    // Convert image data to grayscale.
-                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    for (let i = 0; i < imageData.data.length; i += 4) {
-                        let avg = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
-                        imageData.data[i] = avg;   // red
-                        imageData.data[i + 1] = avg; // green
-                        imageData.data[i + 2] = avg; // blue
-                    }
-                    ctx.putImageData(imageData, 0, 0);
-
-                    requestAnimationFrame(loop); // Keep updating canvas.
-                }
-            }
-
-            loop();
-        });
-    </script>
-
+    <canvas id="outputCanvas" width="640" height="360"></canvas>
+    <div id="progressContainer" style="width: 640px; height: 10px; background-color: #e0e0e0;">
+        <div id="progressBar" style="height: 10px; width: 0%; background-color: #007bff;"></div>
+    </div>
+    <button id="playButton">Play</button>
+    <button id="pauseButton">Pause</button>
+    <script src="script.js"></script>
 </body>
 
 </html>
