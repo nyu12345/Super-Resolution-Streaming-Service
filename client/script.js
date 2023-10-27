@@ -13,6 +13,10 @@ progressContainer.addEventListener('click', function (e) {
     let offsetX = e.clientX - rect.left;
     let percentage = offsetX / rect.width;
     video.currentTime = percentage * video.duration;
+    video.onseeked = function () {
+        drawFrame();
+        video.onseeked = null; // Clean up after using the event
+    };
 });
 
 video.addEventListener('play', function () {
@@ -53,8 +57,9 @@ function drawFrame() {
 
 // If you have play and pause buttons:
 playButton.addEventListener('click', function () {
-    video.play();
-});
-pauseButton.addEventListener('click', function () {
-    video.pause();
+    if (video.paused) {
+        video.play();
+    } else {
+        video.pause();
+    }
 });
