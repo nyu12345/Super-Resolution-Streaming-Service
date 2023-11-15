@@ -8,6 +8,8 @@ from flask import (
 )
 from pytube import YouTube
 import shutil
+import shlex
+import os
 
 app = Flask(__name__)
 
@@ -37,7 +39,9 @@ def download_video():
             video_input_path = video.download(output_path="video-inputs")
             # Super resolution
             shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
-
+            os.system(
+                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} -n RealESRGAN_x4plus -s 2 --suffix outx2 -o video-outputs --fp32"
+            )
             # Display video
 
             return redirect(url_for("watch_video", filename="output_video.mp4"))
