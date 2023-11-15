@@ -1,6 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    send_from_directory,
+)
 from pytube import YouTube
-import os
+import shutil
 
 app = Flask(__name__)
 
@@ -27,17 +34,23 @@ def download_video():
         video = yt.streams.filter(res=resolution, progressive=True).first()
         total_size = video.filesize
         if video:
-            video.download(output_path="videos-inputs")
-            # Super resolution with Real-esrgan
-            os.system(
-                f"python3 real-esrgan/inference_realesrgan_video.py -i video-inputs -n realesrgan-x4plus -s 2 --suffix outx2 -o video-outputs"
-            )
-            return redirect(url_for("index"))
+            video_input_path = video.download(output_path="video-inputs")
+            # Super resolution
+            shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
+
+            # Display video
+
+            return redirect(url_for("watch_video", filename="output_video.mp4"))
         else:
             return "Video with the specified resolution not found."
 
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
+
+@app.route("/video-outputs/<filename>")
+def watch_video(filename):
+    return send_from_directory("video-outputs", filename)
 
 
 if __name__ == "__main__":
