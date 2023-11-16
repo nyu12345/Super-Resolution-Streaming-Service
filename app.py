@@ -39,11 +39,8 @@ def download_video():
             video_input_path = video.download(output_path="video-inputs")
             # Super resolution
             shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
-            print(
-                f"calling: python real-esrgan/inference_realesrgan_video.py -i {video_input_path} -n RealESRGAN_x4plus -s 2 --suffix outx2 -o video-outputs --fp32"
-            )
             os.system(
-                f"python real-esrgan/inference_realesrgan_video.py -i {video_input_path} -n RealESRGAN_x4plus -s 2 --suffix outx2 -o video-outputs --fp32"
+                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} -n RealESRGAN_x4plus -s 2 --suffix outx2 -o video-outputs --fp32"
             )
             # Display video
 
