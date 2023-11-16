@@ -37,7 +37,7 @@ def download_video():
         total_size = video.filesize
         if video:
             video_input_path = video.download(output_path="video-inputs").replace(
-                " ", r"\ "
+                " ", "fsdf"
             )
             # Super resolution
             shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
