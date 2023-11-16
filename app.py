@@ -36,9 +36,7 @@ def download_video():
         video = yt.streams.filter(res=resolution, progressive=True).first()
         total_size = video.filesize
         if video:
-            video_input_path = video.download(output_path="video-inputs").replace(
-                " ", "\ "
-            )
+            video_input_path = video.download(output_path="video-inputs")
             # Super resolution
             shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
             print(
