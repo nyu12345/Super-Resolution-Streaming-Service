@@ -23,6 +23,7 @@ def index():
 def download_video():
     youtube_url = request.form.get("url")
     resolution = request.form.get("resolution")
+    super_resolution_x = request.form.get("super_resolution_x")
     total_size = 0
 
     def display_progress(chunk, file_handler, bytes_remaining):
@@ -43,9 +44,16 @@ def download_video():
                 filename=video.title.replace(" ", "_") + ".mp4",
             )
             # Super resolution
-            os.system(
-                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x2plus -s 2 --suffix outx2 -o static/video-outputs"
-            )
+            if super_resolution_x == 2:
+                os.system(
+                    f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x2plus -s 2 --suffix outx2 -o static/video-outputs"
+                )
+            elif super_resolution_x == 4:
+                os.system(
+                    f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x4plus -s 2 --suffix outx2 -o static/video-outputs"
+                )
+            else:
+                print("UHHHHHHHHHH")
             # Display video
 
             return redirect(
