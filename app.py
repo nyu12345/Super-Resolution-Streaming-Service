@@ -33,6 +33,11 @@ def download_video():
 
     # Download the video
     try:
+        ## remove all existing videos
+        os.system("rm static/video-inputs/*")
+        os.system("rm static/video-outputs/*")
+
+        ## download video from youtube
         yt = YouTube(youtube_url, on_progress_callback=display_progress)
         video = yt.streams.filter(
             res=resolution, progressive=True, file_extension="mp4"
@@ -43,7 +48,7 @@ def download_video():
                 output_path="static/video-inputs",
                 filename=video.title.replace(" ", "_") + ".mp4",
             )
-            # Super resolution
+            ## Super resolution
             if super_resolution_x == "2":
                 os.system(
                     f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x2plus -s 2 --suffix outx2 -o static/video-outputs"
@@ -53,7 +58,8 @@ def download_video():
                     f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x4plus -s 2 --suffix outx2 -o static/video-outputs"
                 )
             else:
-                print("UHHHHHHHHHH")
+                return "Invalid super resolution x"
+
             # Display video
 
             return redirect(
