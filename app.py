@@ -24,6 +24,7 @@ def download_video():
     youtube_url = request.form.get("url")
     resolution = request.form.get("resolution")
     super_resolution_x = request.form.get("super_resolution_x")
+    print(super_resolution_x)
     total_size = 0
 
     def display_progress(chunk, file_handler, bytes_remaining):
