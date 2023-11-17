@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Watch Videos</title>
+</head>
+
+<body>
+    <h1>Watch Videos</h1>
+    <div>
+        <h2>Original</h2>
+        <video width="640" height="360" controls>
+            <source src="{{ url_for('static', filename='video-inputs/' + original) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div>
+        <h2>Super Resolution x2</h2>
+        <video width="640" height="360" controls>
+            <source src="{{ url_for('static', filename='video-outputs/' + super_res) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</body>
+
+</html>

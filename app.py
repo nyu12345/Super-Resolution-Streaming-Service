@@ -33,28 +33,42 @@ def download_video():
     # Download the video
     try:
         yt = YouTube(youtube_url, on_progress_callback=display_progress)
-        video = yt.streams.filter(res=resolution, progressive=True).first()
-        total_size = video.filesize
+        video = yt.streams.filter(
+            res=resolution, progressive=True, file_extension="mp4"
+        ).first()
         if video:
-            video_input_path = video.download(output_path="video-inputs")
+            total_size = video.filesize
+            video_input_path = video.download(
+                output_path="static/video-inputs",
+                filename=video.title.replace(" ", "_") + ".mp4",
+            )
             # Super resolution
-            shutil.copy(video_input_path, f"video-outputs/output_video.mp4")
             os.system(
-                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x2plus -s 2 --suffix outx2 -o video-outputs"
+                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n RealESRGAN_x2plus -s 2 --suffix outx2 -o static/video-outputs"
             )
             # Display video
 
-            return redirect(url_for("watch_video", filename="output_video.mp4"))
+            return redirect(
+                url_for(
+                    "watch_videos",
+                    original=os.path.basename(video_input_path),
+                    super_res=video.title.replace(" ", "_") + "_outx2.mp4",
+                )
+            )
         else:
-            return "Video with the specified resolution not found."
+            return ".mp4 video with the specified resolution not found."
 
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
 
-@app.route("/video-outputs/<filename>")
-def watch_video(filename):
-    return send_from_directory("video-outputs", filename)
+@app.route("/watch_videos")
+def watch_videos():
+    return render_template(
+        "watch_videos.html",
+        original=request.args.get("original"),
+        super_res=request.args.get("super_res"),
+    )
 
 
 if __name__ == "__main__":
