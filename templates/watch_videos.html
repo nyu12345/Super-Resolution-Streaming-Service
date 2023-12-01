@@ -3,6 +3,23 @@
 
 <head>
     <title>Watch Videos</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        div {
+            flex: 1;
+            margin: 10px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,6 +38,30 @@
             Your browser does not support the video tag.
         </video>
     </div>
+
+    <script>
+        // Get video elements
+        var originalVideo = document.getElementById('originalVideo');
+        var superResVideo = document.getElementById('superResVideo');
+
+        // Add event listener to synchronize play/pause
+        originalVideo.addEventListener('play', function () {
+            superResVideo.play();
+        });
+
+        originalVideo.addEventListener('pause', function () {
+            superResVideo.pause();
+        });
+
+        superResVideo.addEventListener('play', function () {
+            originalVideo.play();
+        });
+
+        superResVideo.addEventListener('pause', function () {
+            originalVideo.pause();
+        });
+    </script>
+
 </body>
 
 </html>
