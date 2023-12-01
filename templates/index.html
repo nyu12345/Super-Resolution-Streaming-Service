@@ -12,9 +12,10 @@
         <input type="text" name="url" id="url" required>
         <label for="resolution">Resolution (e.g., 720p):</label>
         <input type="text" name="resolution" id="resolution" required>
-        <select name="super_resolution_x" id="super_resolution_x">
-            <option value="2">2x</option>
-            <option value="4">4x</option>
+        <input type="number" name="upscaling" id="upscaling">
+        <select name="model" id="model">
+            <option value="RealESRGAN_x2plus">RealESRGAN_x2plus</option>
+            <option value="RealESRGAN_x4plus">RealESRGAN_x4plus</option>
         </select>
         <button type="submit">Download</button>
     </form>
