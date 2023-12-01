@@ -25,6 +25,7 @@ def download_video():
     resolution = request.form.get("resolution")
     upscaling = request.form.get("upscaling")
     model = request.form.get("model")
+    face = request.form.get("face")
     total_size = 0
 
     def display_progress(chunk, file_handler, bytes_remaining):
@@ -51,7 +52,7 @@ def download_video():
             )
             ## Super resolution
             os.system(
-                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n {model} -s {upscaling} --suffix outx2 -o static/video-outputs"
+                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n {model} -s {upscaling} --face_enhance {face} --suffix outx2 -o static/video-outputs"
             )
 
             # Display video
