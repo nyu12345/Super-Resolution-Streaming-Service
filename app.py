@@ -52,7 +52,7 @@ def download_video():
             )
             ## Super resolution
             os.system(
-                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n {model} -s {upscaling} --face_enhance {face} --suffix outx2 -o static/video-outputs"
+                f"python real-esrgan/inference_realesrgan_video.py -i {shlex.quote(video_input_path)} --fp32 -n {model} -s {upscaling} {face} --suffix outx2 -o static/video-outputs"
             )
 
             # Display video

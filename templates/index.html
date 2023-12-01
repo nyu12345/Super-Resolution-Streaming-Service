@@ -12,7 +12,9 @@
         <input type="text" name="url" id="url" required>
         <label for="resolution">Resolution (e.g., 720p):</label>
         <input type="text" name="resolution" id="resolution" required>
+        <label for="upscaling">upscale:</label>
         <input type="number" name="upscaling" id="upscaling">
+        <label for="model">model:</label>
         <select name="model" id="model">
             <option value="RealESRGAN_x2plus">RealESRGAN_x2plus</option>
             <option value="RealESRGAN_x4plus">RealESRGAN_x4plus</option>
@@ -20,9 +22,10 @@
             <option value="realesr-general-x4v3">realesr-general-x4v3</option>
             <option value="realesr-animevideov3">realesr-animevideov3</option>
         </select>
+        <label for="face">face:</label>
         <select name="face" id="face">
-            <option value="False">False</option>
-            <option value="True">True</option>
+            <option value="">False</option>
+            <option value="--face_enhance">True</option>
         </select>
         <button type="submit">Download</button>
     </form>
